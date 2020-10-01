@@ -13,16 +13,16 @@ import pandas as pd
 
 
 #read in Flu dataset
-infected_data = pd.read_csv ("TEST_Florida_grocery_movement.csv")
+infected_data = pd.read_csv ("_NOT_CORECT_Florida_grocery_movement.csv")
 infected_data = np.array(infected_data)
-t = np.linspace(0,147,147)
+t = np.linspace(0,140,140)
 
 
 #total population 
-N = 85
+N = 65
 #Initial number of infected: 
 I0 = infected_data[0,1]
-print(I0)
+print("Initial infected is " + str(I0))
 #Number of initial recovered: 
 R0 = 0
 #The number of susceptible: 
@@ -33,6 +33,7 @@ Y0 = S0, I0, R0
 
 days = t 
 actual_infected = infected_data[:,1]
+# sample_actual_infected = infected_data[0:40,1]
 actual_susceptable = N - actual_infected
 
 
@@ -64,17 +65,6 @@ Y0 = S0, I0, R0
 
 sol = odeint(SIR, Y0, t, args = (N, beta, gamma, alpha))
 S, I, R = sol.T
-    
-    
-    
-    
-    
-
-
-plt.ylabel("Number of infected individual out of N") 
-plt.xlabel ('Days')
-
-
 
 
 for i in range (10):
@@ -87,7 +77,7 @@ for i in range (10):
     current_recovered = R0    
 
       
-    for i in range(146):
+    for k in range(139):
 
         #The rate of people getting sick depend on the number of susceptable and devid by n to get a proportion
         #The reason that the num of current infected is there is to scale up the probability of getting sick 
@@ -115,16 +105,23 @@ for i in range (10):
     # print("the current sus is: " + str(current_susceptable))
         
         
-    #coin flip number of infected     
-    plt.plot(t, infected_list, c = 'y')
+    #coin flip number of infected  
+    plt.plot(t, infected_list, c = '#edcc6f', label = "_nolegend_" if i else "Stochastic Estimation")
 
 
   # #Graphs the eqation
 # plt.plot (t, S, label= "SIR Estimated Susceptable")
-plt.plot (t, I, c="r", label = "SIR Estimated Infected")
+plt.plot (t, I, c="#D63931", label = "SIR Estimated Infected")
 # plt.plot (t, R, c="g",label = "SIR Estimated Recovered")
 
 
 #Graphs the real numbers acording to the dataset
-plt.plot (t, actual_infected,c = "k" ,label = "Actual Infected")
-# plt.plot (t, actual_susceptable , c= 'c' label = "Actual Susceptable")
+plt.plot (t, actual_infected,c = "#333333" ,label = "Actual Infected")
+# plt.plot (t, actual_susceptable , c= 'c' ,label = "Actual Susceptable")
+plt.margins(0)
+plt.title("Model Estimations")
+plt.ylabel("Number of Panic Buying Counties", fontsize=10) 
+plt.xlabel ('Days', fontsize=10)
+
+plt.legend(fontsize = 'small')
+plt.savefig("presentation_Estimated_infected_WRONG.png", dpi = 1200)
